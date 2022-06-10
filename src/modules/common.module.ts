@@ -23,7 +23,7 @@ function prepareCommonModule() {
   const getter = {};
 
   async function fetchItemList() {
-    const data = await useApiInstance.getItemList({});
+    const data = await useApiInstance.getItemList();
 
     if (!data) {
       console.error('fetchRecommendHotelList is null');
@@ -31,12 +31,25 @@ function prepareCommonModule() {
       return;
     }
 
-    state.itemList.value = data;
+    state.itemList.value = data.Data;
+  }
+
+  async function updateTheItemCount(postData: { _id: Item['_id']}) {
+    const data = await useApiInstance.updateTheItem(postData);
+
+    if (!data) {
+      console.error('updateTheItemCount is null');
+
+      return;
+    }
+
+    return data;
   }
 
   return {
     state: readonly(state),
     getter: readonly(getter),
-    fetchItemList
+    fetchItemList,
+    updateTheItemCount
   };
 }

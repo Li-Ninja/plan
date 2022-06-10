@@ -1,6 +1,6 @@
 import { inject, App } from 'vue';
 import axios from 'axios';
-import { GetApi } from '@/types/api';
+import { ApiResponseStandard, GetApi, PostApi } from '@/types/api';
 import { useCommonApi } from '@/apis/common.api';
 
 export const apiProvideKey = Symbol('api');
@@ -11,14 +11,12 @@ export function prepareApi(app: App) {
     baseURL: import.meta.env.VITE_API_DOMAIN.replace(/\/$/, '/')
   });
 
-  const commonApi = useCommonApi(getApi);
-
   function getApi<D>(url: string, params?: Record<string, any>): GetApi<D> {
     const data = {
       ...params
     };
 
-    return api.get<D>(url, { params: data })
+    return api.get<ApiResponseStandard<D>>(url, { params: data })
       .then(res => res.data)
       .catch(err => {
         console.error('api catch error', err);
@@ -26,6 +24,23 @@ export function prepareApi(app: App) {
         return null;
       });
   }
+
+  function postApi<D = null>(url: string, postData = {}): PostApi<D> {
+    return api.post<ApiResponseStandard<D>>(url, postData)
+      .then(res => res.data)
+      .catch(err => {
+        console.error('api catch error', err);
+
+        return null;
+      });
+  }
+
+  const crud = {
+    getApi,
+    postApi
+  };
+
+  const commonApi = useCommonApi(crud);
 
   const instance = {
     provideKey: apiProvideKey,
