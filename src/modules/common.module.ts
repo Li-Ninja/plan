@@ -16,7 +16,7 @@ export function useCommonModule() {
 function prepareCommonModule() {
   // state
   const state = shallowReactive({
-    itemList: shallowRef<Item[]>()
+    itemList: shallowRef<Item[]>([])
   });
 
   // getter
