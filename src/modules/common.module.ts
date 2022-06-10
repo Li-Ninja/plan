@@ -26,7 +26,7 @@ function prepareCommonModule() {
     const data = await useApiInstance.getItemList();
 
     if (!data) {
-      console.error('fetchRecommendHotelList is null');
+      console.error('fetchItemList is null');
 
       return;
     }
