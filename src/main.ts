@@ -4,8 +4,6 @@ import { prepareApi } from '@/makers/api.maker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
-createApp(App).mount('#app');
-
 const app = createApp(App);
 
 prepareApi(app);
