@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { inject, toRef } from 'vue';
+import { toRef } from 'vue';
 import dayjs from 'dayjs';
 import { useCommonModule } from '@/modules/common.module';
 import { Item } from '@/types/item';
-import { notifyProvideKey, InjectNotify } from '@/makers/notify.maker';
+import { useNotify } from '@/makers/notify.maker';
 
-const notify = inject<InjectNotify>(notifyProvideKey)!;
+const notify = useNotify();
 const { state, fetchItemList, updateTheItemCount } = useCommonModule();
 const itemList = toRef(state, 'itemList');
 

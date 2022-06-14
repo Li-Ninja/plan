@@ -1,6 +1,4 @@
-import { inject, App } from 'vue';
-
-export const notifyProvideKey = Symbol('notify');
+import { inject, InjectionKey, App } from 'vue';
 
 export function prepareNotify(app: App) {
   const error = (val: string) => {
@@ -28,12 +26,15 @@ export function prepareNotify(app: App) {
     apiError
   };
 
-  app.provide(notifyProvideKey, instance);
+  app.provide(notifyKey, instance);
 
   return instance;
 }
+
+export const notifyKey = Symbol('notify') as InjectionKey<InjectNotify>;
+
 export type InjectNotify = ReturnType<typeof prepareNotify>;
 
-export function useNotify(): InjectNotify {
-  return inject<InjectNotify>(notifyProvideKey)!;
+export function useNotify() {
+  return inject(notifyKey)!;
 }
