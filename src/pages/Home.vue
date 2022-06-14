@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { toRef } from 'vue';
+import { inject, toRef } from 'vue';
 import dayjs from 'dayjs';
 import { useCommonModule } from '@/modules/common.module';
 import { Item } from '@/types/item';
+import { notifyProvideKey, InjectNotify } from '@/makers/notify.maker';
 
+const notify = inject<InjectNotify>(notifyProvideKey)!;
 const { state, fetchItemList, updateTheItemCount } = useCommonModule();
 const itemList = toRef(state, 'itemList');
 
@@ -20,8 +22,7 @@ async function punchInItem(id: Item['_id']) {
   if (resData?.Success) {
     await fetchItemList();
   } else {
-    // TODO alert message component
-    alert(resData?.Message);
+    notify.apiError(resData?.Message);
   }
 }
 

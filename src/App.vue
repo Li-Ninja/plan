@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import { provide } from 'vue';
 import Home from '@/pages/Home.vue';
+import { notifyProvideKey, useNotify } from '@/makers/notify.maker';
+
+const notify = useNotify();
+
+provide(notifyProvideKey, notify);
 
 </script>
 
