@@ -1,28 +1,39 @@
-import { inject, InjectionKey, App } from 'vue';
+import { inject, reactive, App, InjectionKey } from 'vue';
+import { ColorEnum } from '@/enums/common.enum';
 
 export function prepareNotify(app: App) {
-  const error = (val: string) => {
-    if (!val) {
-      console.error(val);
+  const state = reactive({
+    messageList: [] as Message[]
+  });
+  const getMessage = (content: string, delay: number, color: ColorEnum) => ({
+    key: Math.random(),
+    color,
+    content,
+    delay
+  });
 
-      return;
-    }
-
-    console.error(val);
+  const error = (val: string, delay = 3000) => {
+    state.messageList.push(getMessage(val, delay, ColorEnum.Danger));
   };
 
-  const apiError = (val: string | undefined) => {
+  const success = (val: string, delay = 3000) => {
+    state.messageList.push(getMessage(val, delay, ColorEnum.Success));
+  };
+
+  const apiError = (val: string | undefined, delay = 3000) => {
     if (!val) {
-      console.error('this api is null');
+      state.messageList.push(getMessage('this API return null', delay, ColorEnum.Danger));
 
       return;
     }
 
-    console.error(val);
+    state.messageList.push(getMessage(val, delay, ColorEnum.Danger));
   };
 
   const instance = {
+    state,
     error,
+    success,
     apiError
   };
 
@@ -34,6 +45,13 @@ export function prepareNotify(app: App) {
 export const notifyKey = Symbol('notify') as InjectionKey<InjectNotify>;
 
 export type InjectNotify = ReturnType<typeof prepareNotify>;
+
+export interface Message {
+  key: number;
+  color: ColorEnum;
+  content: string;
+  delay: number;
+}
 
 export function useNotify() {
   return inject(notifyKey)!;

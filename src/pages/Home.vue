@@ -20,6 +20,7 @@ async function punchInItem(id: Item['_id']) {
   const resData = await updateTheItemCount({ _id: id });
 
   if (resData?.Success) {
+    notify.success('update successfully');
     await fetchItemList();
   } else {
     notify.apiError(resData?.Message);
