@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { Toast } from 'bootstrap';
 import { ColorEnum } from '@/enums/common.enum';
 
@@ -7,12 +7,14 @@ interface Props {
   content: string
   color: string
   delay: number
+  isHide: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   content: '',
   color: ColorEnum.Primary,
-  delay: 3000
+  delay: 3000,
+  isHide: false
 });
 
 const toastRef = ref<Element>();
@@ -22,9 +24,11 @@ onMounted(() => {
 
   toast.show();
 
-  setTimeout(() => {
-    toast.hide();
-  }, props.delay);
+  watch(() => props.isHide, () => {
+    if (props.isHide) {
+      toast.hide();
+    }
+  });
 });
 
 const bgColor = computed(() => `text-bg-${props.color}`);

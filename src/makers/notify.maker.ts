@@ -9,7 +9,8 @@ export function prepareNotify(app: App) {
     key: Math.random(),
     color,
     content,
-    delay
+    delay,
+    isHide: false
   });
 
   const error = (val: string, delay = 3000) => {
@@ -51,6 +52,7 @@ export interface Message {
   color: ColorEnum;
   content: string;
   delay: number;
+  isHide: boolean;
 }
 
 export function useNotify() {

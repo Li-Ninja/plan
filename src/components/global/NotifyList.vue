@@ -22,10 +22,18 @@ watch(() => messageList.value, (newList, oldList) => {
 }, { deep: true });
 
 function removeTheMessage(key: number, delay: number) {
-  // the setTimeout is clear messageList, not delay hide Notify
   setTimeout(() => {
-    messageList.value = messageList.value.filter(message => message.key !== key);
-  }, delay + 5000);
+    messageList.value.forEach(message => {
+      if (message.key === key) {
+        message.isHide = true;
+      }
+    });
+
+    // the setTimeout is clear messageList, not delay hide Notify
+    setTimeout(() => {
+      messageList.value = messageList.value.filter(message => message.key !== key);
+    }, delay + 3000);
+  }, delay);
 }
 
 </script>
@@ -43,6 +51,7 @@ function removeTheMessage(key: number, delay: number) {
         :content="message.content"
         :color="message.color"
         :delay="message.delay"
+        :is-hide="message.isHide"
       />
     </template>
   </div>
