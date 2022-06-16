@@ -3,7 +3,9 @@ import { toRef } from 'vue';
 import dayjs from 'dayjs';
 import { useCommonModule } from '@/modules/common.module';
 import { Item } from '@/types/item';
+import { useNotify } from '@/makers/notify.maker';
 
+const notify = useNotify();
 const { state, fetchItemList, updateTheItemCount } = useCommonModule();
 const itemList = toRef(state, 'itemList');
 
@@ -18,10 +20,10 @@ async function punchInItem(id: Item['_id']) {
   const resData = await updateTheItemCount({ _id: id });
 
   if (resData?.Success) {
+    notify.success('update successfully');
     await fetchItemList();
   } else {
-    // TODO alert message component
-    alert(resData?.Message);
+    notify.apiError(resData?.Message);
   }
 }
 
